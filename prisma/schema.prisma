@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String        @id @default(uuid(7)) @db.Uuid
+  firstName String
+  lastName  String
+  email     String        @unique
+  password  String
+  roleId    String        @db.Uuid
+  role      Role          @relation(fields: [roleId], references: [id])
+  sessions  UserSession[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model Role {
+  id          String       @id @default(uuid(7)) @db.Uuid
+  name        UserRole     @unique
+  users       User[]
+  permissions Permission[]
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model Permission {
+  id         String   @id @default(uuid(7)) @db.Uuid
+  action     String
+  subject    String
+  conditions Json
+  fields     String[]
+  inverted   Boolean
+  roles      Role[]
+}
+
+model UserSession {
+  id            String    @id @default(uuid(7)) @db.Uuid
+  userId        String    @db.Uuid
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token         String    @unique
+  ipAddress     String?
+  userAgent     String?
+  isRevoked     Boolean   @default(false)
+  revokedAt     DateTime?
+  revokedReason String?
+  lastUsedAt    DateTime
+  expiresAt     DateTime
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
