@@ -22,6 +22,7 @@ export const loggerConfig: Params = {
         'req.headers.cookie',
         'req.body.password',
         'req.body.token',
+        'user.password',
       ],
       censor: '[REDACTED]',
     },
