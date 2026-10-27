@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@casl/ability": "^7.0.0",
+    "@casl/prisma": "^2.0.1",
     "@fastify/compress": "^9.0.0",
     "@fastify/cookie": "^11.0.2",
     "@fastify/cors": "^11.2.0",
